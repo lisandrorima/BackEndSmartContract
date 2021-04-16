@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BackEndSmartContract.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace BackEndSmartContract
 {
@@ -34,7 +35,8 @@ namespace BackEndSmartContract
 				c.SwaggerDoc("v1", new OpenApiInfo { Title = "BackEndSmartContract", Version = "v1" });
 			});
 
-			services.AddDbContext<SmartPropDBContext>(o => o.UseSqlServer(Configuration.GetConnectionString("SmartPropConnectionString")));
+			//services.AddDbContext<SmartPropDbContext>(o => o.UseSqlServer(Configuration.GetConnectionString("SmartPropConnectionString")));
+			services.AddDbContext<SmartPropDbContext>(o =>o.UseSqlServer(Configuration.GetConnectionString("SmartPropConnectionString")));
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
