@@ -11,8 +11,8 @@ namespace BackEndSmartContract.Models
 	public class User
 	{
 		[Key]
-		[DatabaseGenerated(DatabaseGeneratedOption.None)]
-		public int ID{ get; set; }
+		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+		public int? ID{ get; set; }
 		public int PersonalID { get; set; }
 		public string Email { get; set; }
 
@@ -23,6 +23,6 @@ namespace BackEndSmartContract.Models
 		public string Surname { get; set; }
 
 		[Column(TypeName = "NVARCHAR(42)")]
-		public string WalletAdress { get; set; }
+		public string WalletAddress { get; set; }
 	}
 }

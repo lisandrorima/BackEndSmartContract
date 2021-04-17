@@ -11,47 +11,47 @@ namespace BackEndSmartContract.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class RealEstateController : ControllerBase
     {
         private readonly SmartPropDbContext _context;
 
-        public UserController(SmartPropDbContext context)
+        public RealEstateController(SmartPropDbContext context)
         {
             _context = context;
         }
 
-        // GET: api/User
+        // GET: api/RealEstate
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<RealEstate>>> GetRealEstates()
         {
-            return await _context.Users.ToListAsync();
+            return await _context.RealEstates.ToListAsync();
         }
 
-        // GET: api/User/5
+        // GET: api/RealEstate/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int? id)
+        public async Task<ActionResult<RealEstate>> GetRealEstate(int? id)
         {
-            var user = await _context.Users.FindAsync(id);
+            var realEstate = await _context.RealEstates.FindAsync(id);
 
-            if (user == null)
+            if (realEstate == null)
             {
                 return NotFound();
             }
 
-            return user;
+            return realEstate;
         }
 
-        // PUT: api/User/5
+        // PUT: api/RealEstate/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutUser(int? id, User user)
+        public async Task<IActionResult> PutRealEstate(int? id, RealEstate realEstate)
         {
-            if (id != user.ID)
+            if (id != realEstate.ID)
             {
                 return BadRequest();
             }
 
-            _context.Entry(user).State = EntityState.Modified;
+            _context.Entry(realEstate).State = EntityState.Modified;
 
             try
             {
@@ -59,7 +59,7 @@ namespace BackEndSmartContract.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!UserExists(id))
+                if (!RealEstateExists(id))
                 {
                     return NotFound();
                 }
@@ -72,36 +72,36 @@ namespace BackEndSmartContract.Controllers
             return NoContent();
         }
 
-        // POST: api/User
+        // POST: api/RealEstate
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<RealEstate>> PostRealEstate(RealEstate realEstate)
         {
-            _context.Users.Add(user);
+            _context.RealEstates.Add(realEstate);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetUser", new { id = user.ID }, user);
+            return CreatedAtAction("GetRealEstate", new { id = realEstate.ID }, realEstate);
         }
 
-        // DELETE: api/User/5
+        // DELETE: api/RealEstate/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteUser(int? id)
+        public async Task<IActionResult> DeleteRealEstate(int? id)
         {
-            var user = await _context.Users.FindAsync(id);
-            if (user == null)
+            var realEstate = await _context.RealEstates.FindAsync(id);
+            if (realEstate == null)
             {
                 return NotFound();
             }
 
-            _context.Users.Remove(user);
+            _context.RealEstates.Remove(realEstate);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool UserExists(int? id)
+        private bool RealEstateExists(int? id)
         {
-            return _context.Users.Any(e => e.ID == id);
+            return _context.RealEstates.Any(e => e.ID == id);
         }
     }
 }

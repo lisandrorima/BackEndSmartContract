@@ -11,8 +11,10 @@ namespace BackEndSmartContract.Models
         public SmartPropDbContext()
         {
         }
-        public DbSet<RealState> RealStates { get; set; }
+        public DbSet<ImagesRealEstate> ImagesRealEstate { get; set; }
+        public DbSet<RealEstate> RealEstates { get; set; }
         public DbSet<User> Users{ get; set; }
+        
 
 
         public SmartPropDbContext(DbContextOptions<SmartPropDbContext> options)

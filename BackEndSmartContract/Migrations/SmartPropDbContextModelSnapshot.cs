@@ -20,16 +20,35 @@ namespace BackEndSmartContract.Migrations
                 .HasAnnotation("ProductVersion", "5.0.5")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("BackEndSmartContract.Models.RealState", b =>
+            modelBuilder.Entity("BackEndSmartContract.Models.ImagesRealEstate", b =>
                 {
                     b.Property<int>("ID")
-                        .HasColumnType("int");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Adress")
+                    b.Property<string>("ImgURL")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Ambientes")
+                    b.Property<int?>("RealEstateID")
                         .HasColumnType("int");
+
+                    b.HasKey("ID");
+
+                    b.HasIndex("RealEstateID");
+
+                    b.ToTable("ImagesRealEstate");
+                });
+
+            modelBuilder.Entity("BackEndSmartContract.Models.RealEstate", b =>
+                {
+                    b.Property<int?>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Address")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Available")
                         .HasColumnType("bit");
@@ -55,23 +74,28 @@ namespace BackEndSmartContract.Migrations
                     b.Property<int>("RentPaymentSchedule")
                         .HasColumnType("int");
 
+                    b.Property<int>("Rooms")
+                        .HasColumnType("int");
+
                     b.Property<float>("SqMtrs")
                         .HasColumnType("real");
 
-                    b.Property<int?>("userID")
+                    b.Property<int?>("UserID")
                         .HasColumnType("int");
 
                     b.HasKey("ID");
 
-                    b.HasIndex("userID");
+                    b.HasIndex("UserID");
 
-                    b.ToTable("RealStates");
+                    b.ToTable("RealEstates");
                 });
 
             modelBuilder.Entity("BackEndSmartContract.Models.User", b =>
                 {
-                    b.Property<int>("ID")
-                        .HasColumnType("int");
+                    b.Property<int?>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
                     b.Property<string>("Email")
                         .HasColumnType("nvarchar(max)");
@@ -85,7 +109,7 @@ namespace BackEndSmartContract.Migrations
                     b.Property<string>("Surname")
                         .HasColumnType("NVARCHAR(100)");
 
-                    b.Property<string>("WalletAdress")
+                    b.Property<string>("WalletAddress")
                         .HasColumnType("NVARCHAR(42)");
 
                     b.HasKey("ID");
@@ -93,13 +117,22 @@ namespace BackEndSmartContract.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("BackEndSmartContract.Models.RealState", b =>
+            modelBuilder.Entity("BackEndSmartContract.Models.ImagesRealEstate", b =>
                 {
-                    b.HasOne("BackEndSmartContract.Models.User", "user")
+                    b.HasOne("BackEndSmartContract.Models.RealEstate", "RealEstate")
                         .WithMany()
-                        .HasForeignKey("userID");
+                        .HasForeignKey("RealEstateID");
 
-                    b.Navigation("user");
+                    b.Navigation("RealEstate");
+                });
+
+            modelBuilder.Entity("BackEndSmartContract.Models.RealEstate", b =>
+                {
+                    b.HasOne("BackEndSmartContract.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID");
+
+                    b.Navigation("User");
                 });
 #pragma warning restore 612, 618
         }
