@@ -13,6 +13,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using BackEndSmartContract.Models;
 using Microsoft.EntityFrameworkCore;
+using BackEndSmartContract.Data;
+using BackEndSmartContract.Helpers;
 
 namespace BackEndSmartContract
 {
@@ -28,10 +30,16 @@ namespace BackEndSmartContract
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddCors(c =>
+			services.AddScoped<IUserRepository, UserRepository>();
+			services.AddScoped<JWTService>();
+			services.AddCors(o => o.AddPolicy("AllowOrigin", builder =>
 			{
-				c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
-			});
+				builder.AllowAnyOrigin()
+					   .AllowAnyMethod()
+					   .AllowAnyHeader()
+					   .AllowCredentials();
+			}));
+			
 
 
 			services.AddControllers();
@@ -47,7 +55,9 @@ namespace BackEndSmartContract
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
-			app.UseCors(options => options.AllowAnyOrigin());
+			app.UseCors("AllowOrigin");
+
+
 
 
 			if (env.IsDevelopment())

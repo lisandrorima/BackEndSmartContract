@@ -13,15 +13,24 @@ namespace BackEndSmartContract.Models
 		[Key]
 		[DatabaseGenerated(DatabaseGeneratedOption.Identity)]
 		public int? ID{ get; set; }
+
+		[Required]
 		public int PersonalID { get; set; }
 		public string Email { get; set; }
 
+		[Required]
 		[Column(TypeName = "NVARCHAR(100)")]
 		public string Name { get; set; }
 
+		[Required]
 		[Column(TypeName = "NVARCHAR(100)")]
 		public string Surname { get; set; }
 
+		[Required]
+		[Column(TypeName = "NVARCHAR(100)")]
+		public string Password { get; set; }
+
+		[Required]
 		[Column(TypeName = "NVARCHAR(42)")]
 		public string WalletAddress { get; set; }
 	}

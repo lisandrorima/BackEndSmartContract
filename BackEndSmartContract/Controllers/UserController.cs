@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BackEndSmartContract.Models;
+using Microsoft.AspNetCore.Cors;
 
 namespace BackEndSmartContract.Controllers
 {
@@ -75,8 +76,11 @@ namespace BackEndSmartContract.Controllers
         // POST: api/User
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+
+        public async Task<ActionResult<User>> PostUser([FromBody] User user)
         {
+            Response.Headers.Add("Access-Control-Allow-Origin","*");
+            
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 

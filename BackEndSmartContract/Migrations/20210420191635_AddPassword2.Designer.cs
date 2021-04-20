@@ -4,14 +4,16 @@ using BackEndSmartContract.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace BackEndSmartContract.Migrations
 {
     [DbContext(typeof(SmartPropDbContext))]
-    partial class SmartPropDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210420191635_AddPassword2")]
+    partial class AddPassword2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -35,6 +35,10 @@ namespace BackEndSmartContract.Models
         {
             modelBuilder.HasAnnotation("Relational:Collation", "Modern_Spanish_CI_AS");
 
+            modelBuilder.Entity<User>()
+           .HasIndex(p => new { p.Email, p.PersonalID})
+           .IsUnique(true);
+
             OnModelCreatingPartial(modelBuilder);
         }
 
