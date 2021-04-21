@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-
+using System.Text.Json.Serialization;
 
 namespace BackEndSmartContract.Models
 {
@@ -28,6 +28,7 @@ namespace BackEndSmartContract.Models
 
 		[Required]
 		[Column(TypeName = "NVARCHAR(100)")]
+		[JsonIgnore]
 		public string Password { get; set; }
 
 		[Required]

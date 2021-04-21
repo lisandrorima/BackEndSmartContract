@@ -15,6 +15,8 @@ using BackEndSmartContract.Models;
 using Microsoft.EntityFrameworkCore;
 using BackEndSmartContract.Data;
 using BackEndSmartContract.Helpers;
+using AutoMapper;
+using BackEndSmartContract.DTOs;
 
 namespace BackEndSmartContract
 {
@@ -34,12 +36,20 @@ namespace BackEndSmartContract
 			services.AddScoped<JWTService>();
 			services.AddCors(o => o.AddPolicy("AllowOrigin", builder =>
 			{
-				builder.AllowAnyOrigin()
+				builder.WithOrigins(new []{"https://localhost:3000", "http://localhost:3000", "http://localhost:44339" })
 					   .AllowAnyMethod()
 					   .AllowAnyHeader()
 					   .AllowCredentials();
 			}));
-			
+
+
+			/*services.AddAutoMapper(options =>
+				options.CreateMap<RegisterUserDTO, User>()
+			);*/
+
+			services.AddAutoMapper(typeof(UserProfile));
+
+
 
 
 			services.AddControllers();

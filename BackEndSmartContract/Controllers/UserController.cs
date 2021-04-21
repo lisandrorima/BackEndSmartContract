@@ -7,18 +7,30 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using BackEndSmartContract.Models;
 using Microsoft.AspNetCore.Cors;
+using BackEndSmartContract.DTOs;
+using AutoMapper;
+using BackEndSmartContract.Helpers;
+using BackEndSmartContract.Data;
+
+
 
 namespace BackEndSmartContract.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api")]
     [ApiController]
     public class UserController : ControllerBase
     {
         private readonly SmartPropDbContext _context;
+        private readonly IMapper _mapper;
+        private readonly JWTService _jwtService;
 
-        public UserController(SmartPropDbContext context)
+
+        public UserController(SmartPropDbContext context, IMapper mapper, JWTService jwtService)
         {
             _context = context;
+            _mapper = mapper;
+            _jwtService = jwtService;
+
         }
 
         // GET: api/User
@@ -40,6 +52,28 @@ namespace BackEndSmartContract.Controllers
             }
 
             return user;
+        }
+
+
+        [HttpGet("GetAuthUser")]
+        public async Task<ActionResult<User>> GetAuthUser()
+        {
+            try
+            {
+                var jwt = Request.Cookies["jwt"];
+                var token = _jwtService.Verify(jwt);
+
+                int userId = Convert.ToInt32(token.Issuer);
+
+                var user = await _context.Users.FindAsync(userId);
+
+                return Ok(user);
+            }
+            catch (Exception _)
+            {
+                return Unauthorized();
+            }
+
         }
 
         // PUT: api/User/5
@@ -79,13 +113,15 @@ namespace BackEndSmartContract.Controllers
 
         public async Task<ActionResult<User>> PostUser([FromBody] User user)
         {
-            Response.Headers.Add("Access-Control-Allow-Origin","*");
-            
+            Response.Headers.Add("Access-Control-Allow-Origin", "*");
+
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetUser", new { id = user.ID }, user);
         }
+
+
 
         // DELETE: api/User/5
         [HttpDelete("{id}")]
@@ -107,5 +143,55 @@ namespace BackEndSmartContract.Controllers
         {
             return _context.Users.Any(e => e.ID == id);
         }
+
+
+        [HttpPost("register")]
+        public async Task<ActionResult<User>> Register(RegisterUserDTO userdto)
+        {
+
+            var user = _mapper.Map<User>(userdto);
+            user.Password = BCrypt.Net.BCrypt.HashPassword(userdto.Password);
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetUser", new { id = user.ID }, user);
+        }
+
+
+        [HttpPost("login")]
+        public IActionResult Login(LoginDTO userdto)
+        {
+
+
+            var user = _context.Users.Where(u => u.Email == userdto.Email).FirstOrDefault();
+
+
+            if (user == null) return BadRequest("Invalid Credentials");
+
+            if (!BCrypt.Net.BCrypt.Verify(userdto.Password, user.Password))
+            {
+                return BadRequest("Invalid Credentials");
+            }
+
+            var jwt = _jwtService.Generate(user.ID.Value);
+
+            Response.Cookies.Append("jwt", jwt, new CookieOptions
+            {
+                HttpOnly = true
+            });
+            return Ok("success");
+        }
+
+
+        [HttpPost("logout")]
+        public  IActionResult Logout()
+        {
+           Response.Cookies.Delete("jwt");
+            return Ok("Succesfully disconected");
+        }
+
+
+
+
     }
 }

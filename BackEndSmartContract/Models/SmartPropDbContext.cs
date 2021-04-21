@@ -16,7 +16,6 @@ namespace BackEndSmartContract.Models
         public DbSet<User> Users{ get; set; }
         
 
-
         public SmartPropDbContext(DbContextOptions<SmartPropDbContext> options)
             : base(options)
         {
